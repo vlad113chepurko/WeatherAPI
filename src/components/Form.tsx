@@ -1,6 +1,6 @@
 import "./Form.css";
 import useGetWeather from "@/hooks/useGetWeather";
-
+import { motion } from "framer-motion";
 import { useLoadingStore } from "@/store/useLoadingStore";
 import { useCountryStore } from "@/store/useCountryStore";
 import { useRef, useEffect } from "react";
@@ -22,22 +22,28 @@ export default function Form() {
   }, []);
 
   return (
-    <div className="form">
+    <motion.div
+      animate={{ y: 0, opacity: 1 }}
+      initial={{ y: -50, opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className="form"
+    >
       <h1>Отримаємо погоду в - {country ? country : "невідомо"}</h1>
-      <fieldset>
-        <legend>Введіть вашу країну</legend>
-        <input
-          ref={inputRef}
-          onChange={(e) => setCountry(e.target.value)}
-          value={country}
-          disabled={isLoading}
-          type="text"
-          name="name"
-        />
-      </fieldset>
-      <button onClick={handleSubmit} disabled={isLoading}>
+      <label htmlFor="country">Введіть вашу країну</label>
+      <input
+        maxLength={56}
+        placeholder="Київ, Дніпро. Харків..."
+        ref={inputRef}
+        onChange={(e) => setCountry(e.target.value)}
+        value={country}
+        disabled={isLoading}
+        type="text"
+        name="country"
+        id="country"
+      />
+      <button type="button" onClick={handleSubmit} disabled={isLoading}>
         {isLoading ? "Завантаження..." : "Отримати погоду"}
       </button>
-    </div>
+    </motion.div>
   );
 }

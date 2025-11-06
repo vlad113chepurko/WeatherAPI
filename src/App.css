@@ -5,12 +5,26 @@
   text-align: center;
 }
 
+body {
+  min-height: 100dvh;
+}
+
+.app-wrapper {
+  max-width: 1440px;
+  min-height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+}
+
 .App {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  max-width: 1440px;
   width: 100%;
-  min-height: 100dvh;
+
+  gap: 50px;
 }

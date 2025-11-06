@@ -1,9 +1,13 @@
 import "./Display.css";
+import "@/Skeleton.css";
+import { motion } from "framer-motion";
 import { useWeatherDataStore } from "@/store/useWeatherData";
 import { useCountStore } from "@/store/useGetCount";
+import { useLoadingStore } from "@/store/useLoadingStore";
 
 export default function Display() {
   const { count } = useCountStore();
+  const { isLoading } = useLoadingStore();
   const { weatherData } = useWeatherDataStore();
 
   const hasWeatherData =
@@ -13,9 +17,23 @@ export default function Display() {
     weatherData.windSpeed !== null;
 
   return (
-    <div className="display">
+    <motion.div
+      animate={{ y: 0, opacity: 1 }}
+      initial={{ y: -50, opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className="display"
+    >
       <h2>Інформація про погоду</h2>
-      {hasWeatherData ? (
+
+      {isLoading ? (
+        <>
+          <div className="skeleton"></div>
+          <div className="skeleton"></div>
+          <div className="skeleton"></div>
+          <div className="skeleton"></div>
+          <div className="skeleton"></div>
+        </>
+      ) : hasWeatherData ? (
         <div>
           <p className="data-p">
             <img
@@ -54,15 +72,13 @@ export default function Display() {
             Вологість: {weatherData.humidity} %
           </p>
           <p className="data-p">
-            <img width={25} height={25} src="/icons/speed.png" alt="speed" />
+            <img width={25} height={25} src="/icons/speed.png" alt="wind" />
             Швидкість вітру: {weatherData.windSpeed} м/с
           </p>
         </div>
       ) : (
-        <p className="no-data">
-          Немає доступних даних про погоду. Будь ласка, введіть країну.
-        </p>
+        <p>Немає доступних даних про погоду. Будь ласка, введіть країну.</p>
       )}
-    </div>
+    </motion.div>
   );
 }

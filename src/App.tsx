@@ -7,11 +7,14 @@ import Error from "@/components/Error/Error";
 function App() {
   const { isError } = useErrorStore();
   return (
-    <div className="App">
-      {isError && <Error />}
-      <Form />
-      <Display />
-    </div>
+    <main className="app-wrapper">
+      <h1 style={{ fontSize: "3rem" }}>Weather API</h1>
+      <div className="App">
+        {isError && <Error />}
+        <Form />
+        <Display />
+      </div>
+    </main>
   );
 }
 
