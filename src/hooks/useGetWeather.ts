@@ -29,6 +29,11 @@ export default function useGetWeather() {
         humidity: data.main.humidity,
         windSpeed: data.wind.speed,
       });
+
+      setInterval(() => {
+        getWeather(country);
+      }, 60000);
+
       return data;
     } catch (error) {
       console.error("Error fetching weather data:", error);

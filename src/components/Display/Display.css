@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center;
   min-width: 500px;
-  min-height: 300px;
+  min-height: 500px;
 
   width: 500px;
 
@@ -13,4 +13,13 @@
   border-radius: 15px;
 
   background: #2c2c2c;
+
+  p {
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(50px);
+    width: 100%;
+    text-align: left;
+    border-radius: 10px;
+  }
 }
