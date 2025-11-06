@@ -3,19 +3,21 @@ import { useLoadingStore } from "@/store/useLoadingStore";
 import { useErrorStore } from "@/store/useErrorStore";
 import { useWeatherDataStore } from "@/store/useWeatherData";
 import { useCountryStore } from "@/store/useCountryStore";
+import { useCountStore } from "@/store/useGetCount";
 import { useEffect } from "react";
 
 export default function useGetWeather() {
   const { country } = useCountryStore();
   const { setError, isSuccess, setSuccess } = useErrorStore();
   const { setIsLoading } = useLoadingStore();
-  const { setWeatherData } = useWeatherDataStore();
+  const { increment } = useCountStore();
+  const { setWeatherData, weatherData } = useWeatherDataStore();
 
   useEffect(() => {
     if (isSuccess) {
       const intervalId = setInterval(() => {
         getWeather();
-      }, 60000);
+      }, 5000);
 
       return () => clearInterval(intervalId);
     }
@@ -23,7 +25,7 @@ export default function useGetWeather() {
 
   const getWeather = async () => {
     setError(null, false);
-    const key = import.meta.env.VITE_API_KEY;
+    const key = (import.meta as any).env?.VITE_API_KEY;
 
     if (!key) {
       setError("API key is missing", true);
@@ -45,7 +47,7 @@ export default function useGetWeather() {
         humidity: data.main.humidity,
         windSpeed: data.wind.speed,
       });
-
+      increment();
       setSuccess(true);
       return data;
     } catch (error) {

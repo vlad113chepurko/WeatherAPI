@@ -1,7 +1,9 @@
 import "./Display.css";
 import { useWeatherDataStore } from "@/store/useWeatherData";
+import { useCountStore } from "@/store/useGetCount";
 
 export default function Display() {
+  const { count } = useCountStore();
   const { weatherData } = useWeatherDataStore();
 
   return (
@@ -9,6 +11,7 @@ export default function Display() {
       {weatherData !== null ? (
         <div>
           <h2>Weather Information</h2>
+          <p>Requests count: {count}</p>
           <p>Temperature: {weatherData.temperature} °C</p>
           <p>Description: {weatherData.description}</p>
           <p>Humidity: {weatherData.humidity} %</p>
