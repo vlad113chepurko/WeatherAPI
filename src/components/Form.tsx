@@ -3,7 +3,9 @@ import useGetWeather from "@/hooks/useGetWeather";
 
 import { useLoadingStore } from "@/store/useLoadingStore";
 import { useCountryStore } from "@/store/useCountryStore";
+import { useRef, useEffect } from "react";
 export default function Form() {
+  const inputRef = useRef<HTMLInputElement>(null);
   const { country, setCountry } = useCountryStore();
   const { getWeather } = useGetWeather();
   const { isLoading } = useLoadingStore();
@@ -13,12 +15,19 @@ export default function Form() {
     getWeather();
   };
 
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
   return (
     <div className="form">
-      <h1>Get your country</h1>
+      <h1>Отримаємо погоду в - {country ? country : "невідомо"}</h1>
       <fieldset>
-        <legend>Enter your country</legend>
+        <legend>Введіть вашу країну</legend>
         <input
+          ref={inputRef}
           onChange={(e) => setCountry(e.target.value)}
           value={country}
           disabled={isLoading}
@@ -27,7 +36,7 @@ export default function Form() {
         />
       </fieldset>
       <button onClick={handleSubmit} disabled={isLoading}>
-        {isLoading ? "Loading..." : "Get Weather"}
+        {isLoading ? "Завантаження..." : "Отримати погоду"}
       </button>
     </div>
   );

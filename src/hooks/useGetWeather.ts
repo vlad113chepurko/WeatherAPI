@@ -11,17 +11,19 @@ export default function useGetWeather() {
   const { setError, isSuccess, setSuccess } = useErrorStore();
   const { setIsLoading } = useLoadingStore();
   const { increment } = useCountStore();
-  const { setWeatherData, weatherData } = useWeatherDataStore();
+  const { setWeatherData } = useWeatherDataStore();
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && country !== "") {
+      console.log(country);
+
       const intervalId = setInterval(() => {
         getWeather();
       }, 5000);
 
       return () => clearInterval(intervalId);
     }
-  }, [isSuccess]);
+  }, [isSuccess, country]);
 
   const getWeather = async () => {
     setError(null, false);
@@ -52,7 +54,7 @@ export default function useGetWeather() {
       return data;
     } catch (error) {
       console.error("Error fetching weather data:", error);
-      setError("Error fetching weather data", true);
+      setError("Помилка при отриманні погодних даних", true);
     } finally {
       setIsLoading(false);
     }
