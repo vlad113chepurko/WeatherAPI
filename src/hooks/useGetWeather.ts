@@ -1,18 +1,34 @@
 import axios from "axios";
-import { useLoadingStore } from "@/store/useLoagingStore";
+import { useLoadingStore } from "@/store/useLoadingStore";
 import { useErrorStore } from "@/store/useErrorStore";
 import { useWeatherDataStore } from "@/store/useWeatherData";
+import { useCountryStore } from "@/store/useCountryStore";
+import { useEffect } from "react";
 
 export default function useGetWeather() {
-  const { setError } = useErrorStore();
+  const { country } = useCountryStore();
+  const { setError, isSuccess, setSuccess } = useErrorStore();
   const { setIsLoading } = useLoadingStore();
   const { setWeatherData } = useWeatherDataStore();
 
-  const getWeather = async (country: string) => {
+  useEffect(() => {
+    if (isSuccess) {
+      const intervalId = setInterval(() => {
+        getWeather();
+      }, 60000);
+
+      return () => clearInterval(intervalId);
+    }
+  }, [isSuccess]);
+
+  const getWeather = async () => {
     setError(null, false);
     const key = import.meta.env.VITE_API_KEY;
 
-    if (!key) throw new Error("VITE_API_KEY is not defined in .env");
+    if (!key) {
+      setError("API key is missing", true);
+      return;
+    }
 
     setIsLoading(true);
     try {
@@ -30,10 +46,7 @@ export default function useGetWeather() {
         windSpeed: data.wind.speed,
       });
 
-      setInterval(() => {
-        getWeather(country);
-      }, 60000);
-
+      setSuccess(true);
       return data;
     } catch (error) {
       console.error("Error fetching weather data:", error);
